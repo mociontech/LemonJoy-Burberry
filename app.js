@@ -1564,10 +1564,14 @@ function endRound() {
   ui.cameraTunerPanel?.classList.add("hidden");
   ui.endTitle.textContent = `Puntaje: ${state.score}`;
   ui.endPlayerId.textContent = `Jugador: ${state.playerName}`;
-  const finalGrade = Math.max(0, Math.min(100, state.correctLog.length * 10));
+  const finalGrade = getFinalGrade();
   ui.endScoreValue.textContent = `${finalGrade}/100`;
   ui.endTimeValue.textContent = formatGameTime(state.time);
   void guardarExperienciaActual();
+}
+
+function getFinalGrade() {
+  return Math.max(0, Math.min(100, state.correctLog.length * 10));
 }
 
 function stopRoundLoop() {
@@ -1593,7 +1597,8 @@ function buildSessionPayload() {
     nombre: state.firstName,
     apellido: state.lastName,
     experiencia: getExperienceName("Burberry 3D"),
-    score: state.score,
+    score: getFinalGrade(),
+    coins_collected: state.collectedCount,
     time_total: state.time,
     errores_total: state.erroresTotal,
     rondas_completadas: state.rondasData.length,
@@ -1656,7 +1661,7 @@ async function guardarExperienciaActual() {
       sessionId: state.sessionId,
       startedAt: state.startedAt,
       endedAt: state.endedAt,
-      score: state.score,
+      score: getFinalGrade(),
       bonusScore: 0,
       data: buildSessionPayload()
     });
