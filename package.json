@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 8080",
+    "lint": "node --check app.js && node --check datahub.js && node scripts/check-no-legacy-persistence.mjs",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 8080"
+  },
+  "devDependencies": {
+    "vite": "^8.0.2"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  }
+}

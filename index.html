@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Lemonjoy AR Game</title>
+      <meta
+        name="apple-itunes-app"
+        content="app-id=6470517360, app-argument=https://player.onirix.com/exp/LzJBYg"
+      />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="ar-shell">
+      <div id="scene-root" aria-label="Escena 3D interactiva"></div>
+    </div>
+
+    <div id="game-ui">
+      <div id="registerScreen" class="fullscreen-screen image-screen-shell">
+        <div class="image-screen register-artboard">
+          <img
+            class="screen-art"
+            src="/Images/Pantalla_Inicio.png"
+            alt="Pantalla de inicio"
+          />
+
+          <div class="field-shell first-name-shell">
+            <img src="/Images/Nombre.png" alt="" aria-hidden="true" />
+            <input
+              id="firstNameInput"
+              class="image-input"
+              type="text"
+              inputmode="text"
+              autocomplete="given-name"
+              placeholder="Nombre"
+            />
+          </div>
+
+          <div class="field-shell last-name-shell">
+            <img src="/Images/Apellido.png" alt="" aria-hidden="true" />
+            <input
+              id="lastNameInput"
+              class="image-input"
+              type="text"
+              inputmode="text"
+              autocomplete="family-name"
+              placeholder="Apellido"
+            />
+          </div>
+
+          <button id="registerBtn" class="image-button register-image-button" type="button">
+            <img src="/Images/Registrarme.png" alt="Registrarme" />
+          </button>
+
+          <p id="registerError" class="status register-status hidden">
+            Por favor ingresa tu nombre y apellido.
+          </p>
+          <p id="configStatus" class="status register-status hidden"></p>
+          <button id="retrySdkBtn" class="retry-sdk-btn hidden" type="button">
+            Reintentar conexión
+          </button>
+        </div>
+      </div>
+
+      <div id="instructionsScreen" class="fullscreen-screen hidden image-screen-shell">
+        <div class="image-screen instructions-artboard">
+          <div id="instructionsCarousel" class="instructions-carousel" aria-label="Instrucciones">
+            <div id="instructionsTrack" class="instructions-track">
+              <div class="instructions-slide">
+                <img
+                  class="instructions-art"
+                  src="/Images/Instrucciones_1.png"
+                  alt="Instrucciones 1"
+                />
+              </div>
+              <div class="instructions-slide">
+                <img
+                  class="instructions-art"
+                  src="/Images/Instrucciones_2.png"
+                  alt="Instrucciones 2"
+                />
+              </div>
+              <div class="instructions-slide">
+                <img
+                  class="instructions-art"
+                  src="/Images/Instrucciones_3.png"
+                  alt="Instrucciones 3"
+                />
+              </div>
+            </div>
+          </div>
+          <button
+            id="continueBtn"
+            class="image-button instructions-ack-button is-disabled"
+            type="button"
+            aria-disabled="true"
+          >
+            <img src="/Images/Entendido.png" alt="Entendido" />
+          </button>
+        </div>
+      </div>
+
+      <div id="waitingScreen" class="fullscreen-screen hidden image-screen-shell">
+        <div class="image-screen waiting-artboard">
+          <img
+            class="screen-art"
+            src="/Images/Marco Burberry SDE.png"
+            alt="Sala de espera"
+          />
+          <video
+            id="waitingVideo"
+            class="waiting-video"
+            src="/Images/Video_SDE.mp4"
+            autoplay
+            muted
+            loop
+            playsinline
+            webkit-playsinline="true"
+            preload="auto"
+            poster="/Images/Marco Burberry SDE.png"
+          ></video>
+          <img class="waiting-logo" src="/Images/Burberry.png" alt="Burberry" />
+          <img class="waiting-title" src="/Images/Sala de espera.png" alt="Sala de espera" />
+          <button id="startExperienceBtn" class="image-button waiting-start-button" type="button">
+            <img src="/Images/Btn_Comenzar.png" alt="Comenzar" />
+          </button>
+        </div>
+      </div>
+
+      <div id="placementGuide" class="placement-guide hidden">
+        <div class="placement-card">
+          <p class="eyebrow">Paso 1</p>
+          <h2>Coloca el juego en una superficie</h2>
+          <p id="placementCopy">
+            Apunta tu cámara a una superficie plana, espera a que aparezca el marcador blanco y toca el botón <strong>+</strong>.
+          </p>
+          <p id="statusText" class="status">Busca una superficie y coloca la escena.</p>
+        </div>
+      </div>
+
+      <div id="hud" class="hidden">
+        <div class="chip">Monedas: <strong id="score">0</strong></div>
+        <div class="chip">Tiempo: <strong id="time">60</strong></div>
+      </div>
+
+      <div id="cameraTuner" class="camera-tuner hidden">
+        <button id="cameraTunerToggle" class="camera-tuner-toggle" type="button">CAM</button>
+        <div id="cameraTunerPanel" class="camera-tuner-panel hidden">
+          <div class="camera-presets" aria-label="Presets de cámara">
+            <button type="button" data-camera-preset="low">Baja</button>
+            <button type="button" data-camera-preset="mid">Media</button>
+            <button type="button" data-camera-preset="high">Alta</button>
+          </div>
+
+          <div class="camera-control-group">
+            <p>Posición</p>
+            <label>X <input type="range" min="-18" max="18" step="0.1" data-camera-field="position.x" /><output></output></label>
+            <label>Y <input type="range" min="8" max="36" step="0.1" data-camera-field="position.y" /><output></output></label>
+            <label>Z <input type="range" min="8" max="44" step="0.1" data-camera-field="position.z" /><output></output></label>
+          </div>
+
+          <div class="camera-control-group">
+            <p>Mira</p>
+            <label>X <input type="range" min="-10" max="10" step="0.1" data-camera-field="target.x" /><output></output></label>
+            <label>Y <input type="range" min="-1" max="5" step="0.1" data-camera-field="target.y" /><output></output></label>
+            <label>Z <input type="range" min="-8" max="8" step="0.1" data-camera-field="target.z" /><output></output></label>
+          </div>
+
+          <div class="camera-control-group">
+            <p>Zoom</p>
+            <label>F <input type="range" min="20" max="48" step="0.1" data-camera-field="frustum" /><output></output></label>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizScreen" class="quiz-overlay hidden">
+        <div class="quiz-modal">
+          <img class="quiz-brand" src="/Images/Burberry.png" alt="Burberry" />
+
+          <div class="quiz-card-shell">
+            <img
+              class="quiz-card-bg"
+              src="/Images/Fondo_Pregunta.png"
+              alt=""
+              aria-hidden="true"
+            />
+            <h2 id="quizQuestion" class="quiz-question-copy">Pregunta</h2>
+            <div id="quizOptions" class="quiz-options"></div>
+            <p id="quizFeedback" class="status quiz-feedback hidden"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="incorrectScreen" class="quiz-overlay hidden">
+        <div class="quiz-modal">
+          <img class="quiz-brand" src="/Images/Burberry.png" alt="Burberry" />
+          <div class="quiz-card-shell quiz-card-shell--incorrect">
+            <img
+              class="quiz-card-bg"
+              src="/Images/Incorrecto.png"
+              alt=""
+              aria-hidden="true"
+            />
+            <p id="incorrectReminder" class="status quiz-feedback quiz-feedback--centered"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="debugPanel" class="debug-panel hidden">
+        <p class="eyebrow">Debug</p>
+        <p id="debugText" class="debug-text">Esperando eventos...</p>
+        <div class="debug-actions">
+          <button id="debugHideBtn" type="button">Ocultar todo</button>
+          <button id="debugSpawnBtn" type="button">Spawn prueba</button>
+        </div>
+        <div class="debug-actions debug-calibration-actions">
+          <button id="debugYawMinus15Btn" type="button">-15</button>
+          <button id="debugYawMinus5Btn" type="button">-5</button>
+          <button id="debugYawPlus5Btn" type="button">+5</button>
+          <button id="debugYawPlus15Btn" type="button">+15</button>
+        </div>
+      </div>
+
+      <div id="joystick" class="hidden">
+        <div id="joyBase"><div id="joyKnob"></div></div>
+      </div>
+
+      <div id="end" class="fullscreen-screen hidden image-screen-shell">
+        <div class="image-screen end-artboard">
+          <img
+            class="screen-art"
+            src="/Images/Despedida.png"
+            alt="Pantalla de despedida"
+          />
+          <div class="end-score-shell" aria-label="Resumen final">
+            <img class="end-score-bg" src="/Images/Puntaje.png" alt="" aria-hidden="true" />
+            <div class="end-score-copy">
+              <p class="end-score-label">Calificación</p>
+              <p id="endScoreValue" class="end-score-value">0/100</p>
+              <p class="end-score-label end-score-label--time">Tiempo total</p>
+              <p id="endTimeValue" class="end-time-value">00:00</p>
+            </div>
+          </div>
+          <button id="restartBtn" class="image-button end-finish-button" type="button">
+            <img src="/Images/Btn_Finalizar.png" alt="Finalizar" />
+          </button>
+          <h2 id="endTitle" class="hidden">Puntaje: 0</h2>
+          <p id="endPlayerId" class="hidden"></p>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
